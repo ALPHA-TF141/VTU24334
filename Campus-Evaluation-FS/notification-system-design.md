@@ -350,3 +350,108 @@ PostgreSQL
 +
 Read Replicas
 
+# Stage 5 - Reliable Bulk Notification System
+
+Current Problems
+
+1. Sequential execution
+2. Slow processing
+3. Email failures stop workflow
+4. Not scalable
+5. No retry mechanism
+
+---
+
+## Better Design
+
+Use Message Queue
+
+Examples:
+
+- RabbitMQ
+- Kafka
+
+Flow:
+
+HR
+|
+v
+API
+|
+v
+Queue
+|
+v
+Workers
+|
++--> Email Service
+|
++--> Notification Service
+|
++--> Database Service
+
+---
+
+## Why?
+
+- Asynchronous processing
+- Retry support
+- Fault tolerance
+- Scalability
+
+---
+
+## Revised Pseudocode
+
+function notifyAll(studentIds, message){
+
+  for(studentId of studentIds){
+
+    enqueue({
+      studentId,
+      message
+    });
+
+  }
+
+}
+
+worker(){
+
+  task = dequeue();
+
+  saveToDatabase(task);
+
+  sendEmail(task);
+
+  pushNotification(task);
+
+}
+
+---
+
+## Email Failure Case
+
+If email fails:
+
+- Save failure log
+- Retry 3 times
+- Move to Dead Letter Queue
+
+---
+
+## Should DB Save and Email Happen Together?
+
+No.
+
+Reason:
+
+Email is external.
+
+Database write should succeed independently.
+
+If email fails:
+
+Notification still exists in system.
+
+This improves reliability.
