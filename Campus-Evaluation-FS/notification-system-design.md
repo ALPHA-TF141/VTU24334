@@ -193,3 +193,82 @@ Solutions:
 - Table partitioning
 - Caching
 - Read replicas
+
+# Stage 3 - Query Optimization
+
+Current Query:
+
+SELECT *
+FROM notifications
+WHERE studentID = 1042
+AND isRead = false
+ORDER BY createdAt ASC;
+
+---
+
+## Is It Accurate?
+
+Yes.
+
+It returns unread notifications for a student.
+
+---
+
+## Why Is It Slow?
+
+Database Size:
+
+50,000 students
+5,000,000 notifications
+
+Without indexes:
+
+- Full table scan
+- Sorting millions of rows
+
+Complexity:
+
+O(n)
+
+---
+
+## Better Index
+
+CREATE INDEX idx_notifications_student_read_created
+ON notifications(studentId,isRead,createdAt);
+
+Query:
+
+SELECT *
+FROM notifications
+WHERE studentID = 1042
+AND isRead = FALSE
+ORDER BY createdAt ASC;
+
+Complexity:
+
+Approximately O(log n)
+
+---
+
+## Should We Index Every Column?
+
+No.
+
+Problems:
+
+- Increased storage
+- Slower INSERTs
+- Slower UPDATEs
+- Unused indexes waste memory
+
+Only index frequently searched columns.
+
+---
+
+## Placement Notifications Last 7 Days
+
+SELECT DISTINCT studentId
+FROM notifications
+WHERE notificationType = 'Placement'
+AND createdAt >= NOW() - INTERVAL '7 days';
