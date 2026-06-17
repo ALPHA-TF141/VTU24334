@@ -10,21 +10,29 @@ export async function fetchNotifications(
   limit = 20,
   type = "All"
 ) {
-  const params = {
-    page,
-    limit,
-  };
+  try {
+    const params = {
+      page,
+      limit,
+    };
 
-  if (type !== "All") {
-    params.notification_type = type;
+    if (type !== "All") {
+      params.notification_type = type;
+    }
+
+    const response = await axios.get(API_URL, {
+      params,
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(
+      "API ERROR:",
+      error.response?.data || error.message
+    );
+    throw error;
   }
-
-  const response = await axios.get(API_URL, {
-    params,
-    headers: {
-      Authorization: `Bearer ${TOKEN}`,
-    },
-  });
-
-  return response.data;
 }
