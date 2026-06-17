@@ -5,9 +5,11 @@ const API_URL =
 
 const TOKEN = import.meta.env.VITE_TOKEN;
 
+console.log("TOKEN:", TOKEN);
+
 export async function fetchNotifications(
   page = 1,
-  limit = 20,
+  limit = 10,
   type = "All"
 ) {
   try {
@@ -16,7 +18,7 @@ export async function fetchNotifications(
       limit,
     };
 
-    if (type !== "All") {
+    if (type && type !== "All") {
       params.notification_type = type;
     }
 
@@ -24,15 +26,28 @@ export async function fetchNotifications(
       params,
       headers: {
         Authorization: `Bearer ${TOKEN}`,
+        "Content-Type": "application/json",
       },
     });
 
+    console.log("API SUCCESS:", response.data);
+
     return response.data;
   } catch (error) {
-    console.error(
-      "API ERROR:",
-      error.response?.data || error.message
-    );
-    throw error;
-  }
+  console.log("STATUS:", error.response?.status);
+
+  console.log(
+    "DATA:",
+    JSON.stringify(error.response?.data, null, 2)
+  );
+
+  console.log(
+    "FULL ERROR:",
+    error.response
+  );
+
+  return {
+    notifications: [],
+  };
+}
 }
