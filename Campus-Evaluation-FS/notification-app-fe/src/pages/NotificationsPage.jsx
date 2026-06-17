@@ -54,7 +54,7 @@ export function NotificationsPage() {
       </Box>
 
       {true && (
-        <Box display="flex" justifyContent="center" py={6}>
+        <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
           <CircularProgress />
         </Box>
       )}
@@ -76,7 +76,7 @@ export function NotificationsPage() {
       )}
 
       {!loading && (
-        <Box display="flex" justifyContent="center" mt={4}>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
           <Pagination
             count={totalPages}
             page={page}
