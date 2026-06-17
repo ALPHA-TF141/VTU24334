@@ -503,3 +503,296 @@ O(n log 10)
 ≈ O(n)
 
 This allows efficient maintenance of the Top 10 notifications without re-sorting the entire collection.
+
+# Campus Notification Platform - Stage 7
+
+## Overview
+
+This project is a React-based frontend application developed for the AffordMed Campus Hiring Evaluation. The application provides a user-friendly interface for students to view and manage campus notifications related to Placements, Results, and Events.
+
+The frontend consumes the AffordMed Notification API and integrates the custom Logging Middleware developed during the pre-test setup.
+
+---
+
+## Features
+
+### Notifications Page
+
+* View all notifications
+* Filter notifications by type
+
+  * All
+  * Placement
+  * Result
+  * Event
+* Pagination support
+* Viewed / Unviewed notification tracking
+* Responsive Material UI design
+
+### Priority Notifications Page
+
+Displays the most important notifications first based on:
+
+| Notification Type | Weight |
+| ----------------- | ------ |
+| Placement         | 3      |
+| Result            | 2      |
+| Event             | 1      |
+
+Sorting Criteria:
+
+1. Priority Weight (Descending)
+2. Timestamp (Descending)
+
+Supported limits:
+
+* Top 10
+* Top 15
+* Top 20
+
+---
+
+## Technologies Used
+
+* React
+* Vite
+* Material UI
+* Axios
+* JavaScript (ES6)
+
+---
+
+## Project Structure
+
+```text
+src/
+├── api/
+│   └── notifications.js
+│
+├── components/
+│   ├── NotificationCard.jsx
+│   └── NotificationFilter.jsx
+│
+├── hooks/
+│   └── useNotifications.js
+│
+├── pages/
+│   ├── NotificationsPage.jsx
+│   └── PriorityNotificationsPage.jsx
+│
+├── App.jsx
+├── main.jsx
+└── index.css
+```
+
+---
+
+## API Configuration
+
+### Notification Endpoint
+
+```http
+GET /evaluation-service/notifications
+```
+
+### Query Parameters
+
+| Parameter         | Description                      |
+| ----------------- | -------------------------------- |
+| page              | Page number                      |
+| limit             | Number of notifications per page |
+| notification_type | Placement, Result, Event         |
+
+### Authorization
+
+All API requests include:
+
+```http
+Authorization: Bearer <access_token>
+```
+
+The token is configured using:
+
+```env
+VITE_TOKEN=<ACCESS_TOKEN>
+```
+
+---
+
+## Viewed Notifications
+
+Viewed notifications are stored in browser Local Storage.
+
+Storage Key:
+
+```text
+viewed
+```
+
+When a user clicks a notification:
+
+1. Notification ID is saved in Local Storage.
+2. Notification is marked as viewed.
+3. UI updates automatically.
+
+---
+
+## Priority Ranking Algorithm
+
+```javascript
+const PRIORITY_WEIGHT = {
+  Placement: 3,
+  Result: 2,
+  Event: 1,
+};
+```
+
+Notifications are sorted by:
+
+```javascript
+Weight DESC
+Timestamp DESC
+```
+
+The top N notifications are then displayed.
+
+---
+
+## Logging Middleware Integration
+
+The frontend integrates the reusable Logging Middleware created during the pre-test setup.
+
+Example log entries:
+
+```javascript
+Log(
+  "frontend",
+  "info",
+  "page",
+  "Notifications page loaded"
+);
+
+Log(
+  "frontend",
+  "info",
+  "api",
+  "Fetching notifications"
+);
+
+Log(
+  "frontend",
+  "error",
+  "api",
+  "Failed to fetch notifications"
+);
+```
+
+Logging is performed for:
+
+* API calls
+* Page navigation
+* User actions
+* Error handling
+* Component lifecycle events
+
+---
+
+## Installation
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+---
+
+## Running the Application
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Application URL:
+
+```text
+http://localhost:3000
+```
+
+---
+
+## Build
+
+Generate production build:
+
+```bash
+npm run build
+```
+
+---
+
+## Testing Checklist
+
+### Notifications Page
+
+* Notifications load successfully
+* Filters work correctly
+* Pagination works correctly
+* Viewed status updates correctly
+
+### Priority Notifications Page
+
+* Notifications sorted by priority
+* Top N selection works
+* Placement notifications appear before Result and Event notifications
+
+### Error Handling
+
+* Invalid token handled gracefully
+* API failures display error messages
+* Empty notification list displays informative message
+
+---
+
+## Screenshots
+
+Include screenshots inside:
+
+```text
+screenshots/
+```
+
+Suggested screenshots:
+
+```text
+notifications-page.png
+priority-notifications-page.png
+mobile-view.png
+```
+
+---
+
+## Deliverables
+
+This repository contains:
+
+* Logging Middleware
+* Stage 1 System Design
+* Stage 2 Database Design
+* Stage 3 Query Optimization Analysis
+* Stage 4 Performance Improvement Strategy
+* Stage 5 Notification Architecture Design
+* Stage 6 Priority Notification Implementation
+* Stage 7 React Frontend Application
+* Screenshots
+* Demo Video
+
+---
+
+## Author
+
+Maria Immanuel L
+
+Roll Number: VTU24334
