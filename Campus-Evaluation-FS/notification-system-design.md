@@ -272,3 +272,81 @@ SELECT DISTINCT studentId
 FROM notifications
 WHERE notificationType = 'Placement'
 AND createdAt >= NOW() - INTERVAL '7 days';
+
+# Stage 4 - Performance Improvements
+
+Problem:
+
+Every page load triggers database query.
+
+Result:
+
+Database overload.
+
+---
+
+## Solution 1 - Redis Cache
+
+Flow:
+
+User -> Redis -> DB
+
+Benefits:
+
+- Very fast
+- Reduced DB load
+
+Tradeoff:
+
+- Cache invalidation complexity
+
+---
+
+## Solution 2 - Pagination
+
+GET /notifications?page=1&limit=20
+
+Benefits:
+
+- Less data transfer
+
+Tradeoff:
+
+- More API calls
+
+---
+
+## Solution 3 - WebSockets
+
+Push notifications in real time.
+
+Benefits:
+
+- No repeated polling
+
+Tradeoff:
+
+- Persistent connections required
+
+---
+
+## Solution 4 - Read Replicas
+
+Benefits:
+
+- Separate reads from writes
+
+Tradeoff:
+
+- Replication lag
+
+Recommended Architecture:
+
+WebSocket
++
+Redis Cache
++
+PostgreSQL
++
+Read Replicas
+
