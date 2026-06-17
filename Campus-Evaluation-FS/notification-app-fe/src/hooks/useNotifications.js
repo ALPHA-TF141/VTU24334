@@ -12,7 +12,7 @@ export function useNotifications(page, filter) {
       try {
         setLoading(true);
 
-        const data = await fetchNotifications(1, 10);
+        const data = await fetchNotifications(page, 10, filter);
 
         setNotifications(
           data.notifications || []

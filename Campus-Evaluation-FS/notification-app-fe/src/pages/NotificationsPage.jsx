@@ -29,11 +29,12 @@ export function NotificationsPage() {
   const unreadCount = 2;
 
   const handleFilterChange = (newFilter) => {
-
+    setFilter(newFilter);
+    setPage(1);
   };
 
   const handlePageChange = (_, newPage) => {
-
+    setPage(newPage);
   };
 
   return (
@@ -53,7 +54,7 @@ export function NotificationsPage() {
         <NotificationFilter value={filter} onChange={handleFilterChange} />
       </Box>
 
-      {true && (
+      {loading && (
         <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
           <CircularProgress />
         </Box>
@@ -67,10 +68,10 @@ export function NotificationsPage() {
         <Alert severity="info">Something message</Alert>
       )}
 
-      {loading && !error && notifications.length > 0 && (
+      {!loading && !error && notifications.length > 0 && (
         <Stack spacing={1.5}>
           {notifications.map((n) => (
-            <></>
+            <NotificationCard key={n.ID} notification={n} viewed={false} onView={() => {}} />
           ))}
         </Stack>
       )}
