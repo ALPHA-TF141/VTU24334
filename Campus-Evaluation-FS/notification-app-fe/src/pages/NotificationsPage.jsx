@@ -16,10 +16,15 @@ import { NotificationFilter } from "../components/NotificationFilter";
 import { useNotifications } from "../hooks/useNotifications";
 
 export function NotificationsPage() {
-  const [filter, setFilter] = useState();
-  const [page, setPage] = useState("1");
+  const [filter, setFilter] = useState("All");
+  const [page, setPage] = useState(1);
 
-  const { notifications, totalPages, loading, error } = useNotifications();
+  const {
+    notifications,
+    totalPages,
+    loading,
+    error,
+  } = useNotifications(page, filter);
 
   const unreadCount = 2;
 
