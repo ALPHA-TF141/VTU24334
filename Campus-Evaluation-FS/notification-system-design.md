@@ -112,3 +112,84 @@ Flow:
 2. WebSocket connection established
 3. New notification pushed instantly
 4. UI updated without refresh
+
+# Stage 2 - Database Design
+
+## Suggested Database
+
+PostgreSQL
+
+Reason:
+
+- ACID compliance
+- Reliable transactions
+- Efficient indexing
+- Strong relational support
+- Scalability
+
+---
+
+## Students Table
+
+CREATE TABLE students (
+  id BIGINT PRIMARY KEY,
+  name VARCHAR(100),
+  email VARCHAR(100)
+);
+
+---
+
+## Notifications Table
+
+CREATE TABLE notifications (
+  id UUID PRIMARY KEY,
+  studentId BIGINT,
+  notificationType VARCHAR(20),
+  message TEXT,
+  isRead BOOLEAN DEFAULT FALSE,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(studentId) REFERENCES students(id)
+);
+
+---
+
+## Fetch Notifications
+
+SELECT *
+FROM notifications
+WHERE studentId = 1042
+ORDER BY createdAt DESC;
+
+---
+
+## Unread Notifications
+
+SELECT *
+FROM notifications
+WHERE studentId = 1042
+AND isRead = FALSE;
+
+---
+
+## Mark Read
+
+UPDATE notifications
+SET isRead = TRUE
+WHERE id = 'uuid';
+
+---
+
+## Scaling Issues
+
+As notifications grow:
+
+- Slow queries
+- Large table scans
+- Increased storage
+
+Solutions:
+
+- Indexing
+- Table partitioning
+- Caching
+- Read replicas
